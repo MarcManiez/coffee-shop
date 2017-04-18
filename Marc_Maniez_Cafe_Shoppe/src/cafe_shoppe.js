@@ -1,3 +1,5 @@
+const Shoppe = require('./shoppe');
+
 // go through time linearly and carry a bunch of actions every time.
 
 // reformat the object for some efficiency. We can't loop over the object every time we need to find something.
@@ -30,6 +32,6 @@
   // - I could have made it an actual linkedList
   // - I could have made a unique Queue that takes different insertion criteria, rather than making different queue objects.
 
-function cafeShoppe(baristas = 2, menu) {
+const shoppe = new Shoppe();
 
-}
+shoppe.operate();

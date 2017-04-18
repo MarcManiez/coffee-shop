@@ -6,7 +6,7 @@ const defaultOrders = JSON.parse(fs.readFileSync('./sample-data/input.json'));
 
 // Other required classes:
 const Fifo = require('./fifo_queue');
-const ProfitQueue = require('./src/profit_queue');
+const ProfitQueue = require('./profit_queue');
 const Barista = require('./barista');
 
 // various queing schemes:
@@ -16,7 +16,7 @@ const queueSwitch = {
 };
 
 class Shoppe {
-  constructor (baristas=2, menu=defaultMenu, closingTime=100, queue='fifo', orders=defaultOrders.slice()) {
+  constructor ({ baristas=2, menu=defaultMenu, closingTime=100, queue='fifo', orders=defaultOrders.slice() } = {}) {
     this.queue = queueSwitch[queue]();
     this.currentTime = 0;
     this.closingTime = closingTime;
@@ -34,7 +34,7 @@ class Shoppe {
     while (this.currentTime <= this.closingTime) {
       let newOrder = this.checkOrders();
       while (newOrder) {
-        this.queue.enqueue(newOrder);
+        this.queue.enqueue(newOrder, this.menu);
         newOrder = this.checkOrders();
       }
       let barista = this.getAvailableBarista();
@@ -67,18 +67,3 @@ class Shoppe {
 }
 
 module.exports = Shoppe;
-
-// go through each time
-  // is there an order for the current time? ==> check orders
-  // if so, process it ==> process order
-    // this means adding them to a queue
-    // the queue will be inserted into according to specific optimization criteria ==> insert function for each optimization criteria.
-  // if no more orders, check if there are any orders in the queue
-    // if yes
-    // check if there is an available barista
-    // take the item at the front of the queue
-    // if no order move on to next time, repeat process
-
-// Optimizations (throughput, shortest avg wait time, most profit made)
-  // no matter what, the orders must remain in chronological order
-  //

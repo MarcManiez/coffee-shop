@@ -14,7 +14,7 @@ const queueSwitch = {
 };
 
 class Shoppe {
-  constructor (baristas=2, menu=defaultMenu, closingTime=100, queue='fifo', orders=defaultOrders) {
+  constructor (baristas=2, menu=defaultMenu, closingTime=100, queue='fifo', orders=defaultOrders.slice()) {
     this.queue = queueSwitch[queue]();
     this.currentTime = 0;
     this.closingTime = closingTime;

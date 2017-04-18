@@ -2,6 +2,7 @@ const fs = require('fs');
 const chai = require('chai');
 const expect = chai.expect;
 const Shoppe = require('../src/shoppe');
+const Barista = require('../src/barista');
 
 describe('cafe shoppe', () => {
 
@@ -55,6 +56,22 @@ describe('cafe shoppe', () => {
       shoppe.makeBeverage(shoppe.baristas[0], input[0]);
       shoppe.makeBeverage(shoppe.baristas[1], input[1]);
       return expect(shoppe.getAvailableBarista()).to.be.null;
+    });
+  });
+});
+
+describe('Barista', () => {
+  describe('isAvailable', () => {
+    it('should be available if the busyUntil property is inferior or equal to the current time', () => {
+      const barista = new Barista(1);
+      barista.busyUntil = 10;
+      return expect(barista.isAvailable(10)).to.be.true;
+    });
+
+    it('should be unavailable if the busyUntil property is superior to the current time', () => {
+      const barista = new Barista(1);
+      barista.busyUntil = 11;
+      return expect(barista.isAvailable(10)).to.be.false;
     });
   });
 });

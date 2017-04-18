@@ -3,17 +3,26 @@ const chai = require('chai');
 const expect = chai.expect;
 const Shoppe = require('../src/shoppe');
 const Barista = require('../src/barista');
+const ProfitQueue = require('../src/profit_queue');
+
+const input = JSON.parse(fs.readFileSync('./sample-data/input.json'));
+const output = JSON.parse(fs.readFileSync('./sample-data/output_fifo.json'));
+const menu = JSON.parse(fs.readFileSync('./sample-data/menu.json')).reduce((prev, curr) => {
+  prev[curr.type] = { brew_time: curr.brew_time, profit: curr.profit };
+  return prev;
+}, {});
 
 describe('cafe shoppe', () => {
-
-  const input = JSON.parse(fs.readFileSync('./sample-data/input.json'));
-  const output = JSON.parse(fs.readFileSync('./sample-data/output_fifo.json'));
 
   describe('fifo', () => {
     it('should process the orders on a first come, first served basis', () => {
       const shoppe = new Shoppe();
       return expect(shoppe.operate()).to.equal(JSON.stringify(output));
     });
+  });
+
+  describe('profit maximization', () => {
+
   });
 
   describe('checkOrders', () => {
@@ -72,6 +81,46 @@ describe('Barista', () => {
       const barista = new Barista(1);
       barista.busyUntil = 11;
       return expect(barista.isAvailable(10)).to.be.false;
+    });
+  });
+});
+
+describe('Profit Queue', () => {
+  describe('enqueue', () => {
+    it('should enqueue orders such as to list them from least to most exensive per time', () => {
+      const samples = JSON.parse(fs.readFileSync('./sample-data/input.json')).slice();
+      const queue = new ProfitQueue();
+      queue.enqueue(samples[0], menu);
+      queue.enqueue(samples[1], menu);
+      queue.enqueue(samples[5], menu);
+      return expect(queue.queue).to.eql([
+        {
+          'order_id': 6,
+          'order_time': 10,
+          'type': 'tea'
+        },
+        {
+          'order_id': 2,
+          'order_time': 7,
+          'type': 'affogato'
+        },
+        {
+          'order_id': 1,
+          'order_time': 7,
+          'type': 'latte'
+        }
+      ]);
+    });
+  });
+
+  describe('dequeue', () => {
+    it('should return the most expensive order in the queue', () => {
+      const samples = JSON.parse(fs.readFileSync('./sample-data/input.json')).slice();
+      const queue = new ProfitQueue();
+      queue.enqueue(samples[0], menu);
+      queue.enqueue(samples[1], menu);
+      queue.enqueue(samples[5], menu);
+      return expect(queue.dequeue()).to.equal(samples[0]);
     });
   });
 });

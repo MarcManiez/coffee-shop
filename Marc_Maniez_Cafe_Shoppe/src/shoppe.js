@@ -1,14 +1,35 @@
 const fs = require('fs');
 
+// I'm building shoppe so as to take different menus and orders, but the files below consitute our default options
 const defaultMenu = JSON.parse(fs.readFileSync('../sample-data/menu.json'));
-const fifo = require('./fifo_queue');
 const defaultOrders = JSON.parse(fs.readFileSync('../sample-data/input.json'));
 
-module.exports = function(baristas=2, menu=defaultMenu, time=100, queue='fifo', orders=defaultOrders) {
-  const queueSwitch = { fifo };
-  queue = queueSwitch[queue];
-
+// different queing schemes:
+const queueSwitch = {
+  fifo: () => new require('./fifo_queue'),
 };
+
+// Other required classes:
+const Barista = require('./barista');
+
+class Shoppe {
+  constructor (baristas=2, menu=defaultMenu, closingTime=100, queue='fifo', orders=defaultOrders) {
+    this.queue = queueSwitch[queue]();
+    this.currentTime = 0;
+    this.closingTime = closingTime;
+    this.menu = menu;
+    this.order = orders;
+    this.baristas = new Array(baristas).map((item, index) => new Barista(index + 1));
+  }
+  operate() {
+    while (this.currentTime <= this.closingTime) {
+      console.log('test ', this.currentTime);
+      this.currentTime++;
+    }
+  }
+}
+
+module.exports = Shoppe;
 
 // go through each time
   // is there an order for the current time? ==> check orders

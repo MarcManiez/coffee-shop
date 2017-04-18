@@ -7,6 +7,7 @@ const ProfitQueue = require('../src/profit_queue');
 
 const input = JSON.parse(fs.readFileSync('./sample-data/input.json'));
 const output = JSON.parse(fs.readFileSync('./sample-data/output_fifo.json'));
+const profitableOutput = JSON.parse(fs.readFileSync('./sample-data/profit_maximized_output.json'));
 const menu = JSON.parse(fs.readFileSync('./sample-data/menu.json')).reduce((prev, curr) => {
   prev[curr.type] = { brew_time: curr.brew_time, profit: curr.profit };
   return prev;
@@ -22,7 +23,10 @@ describe('cafe shoppe', () => {
   });
 
   describe('profit maximization', () => {
-
+    it('should process the most profitable orders first', () => {
+      const shoppe = new Shoppe({ queue: 'profit' });
+      return expect(shoppe.operate()).to.equal(JSON.stringify(profitableOutput));
+    });
   });
 
   describe('checkOrders', () => {

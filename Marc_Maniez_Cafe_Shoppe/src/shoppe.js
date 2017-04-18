@@ -6,11 +6,13 @@ const defaultOrders = JSON.parse(fs.readFileSync('./sample-data/input.json'));
 
 // Other required classes:
 const Fifo = require('./fifo_queue');
+const ProfitQueue = require('./src/profit_queue');
 const Barista = require('./barista');
 
 // various queing schemes:
 const queueSwitch = {
   fifo: () => new Fifo(),
+  profit: () => new ProfitQueue(),
 };
 
 class Shoppe {
@@ -23,12 +25,9 @@ class Shoppe {
       prev[curr.type] = { brew_time: curr.brew_time, profit: curr.profit };
       return prev;
     }, {});
-    // Assuming customer orders are in chronological order, reversing them will allow us to always access the latest one in constant time, provided that we pop them off one by one as they are processed.
+    // Assuming customer orders are in chronological order, reversing them will allow us to always access the upcoming order in constant time, provided that we pop them off one by one as they are processed.
     this.orders = orders.reverse();
-    this.baristas = [];
-    for (let i = 0; i < baristas; i++) {
-      this.baristas.push(new Barista(i + 1));
-    }
+    this.baristas = new Array(baristas).fill(0).map((item, index) => new Barista(index + 1));
     this.logs = [];
   }
   operate() {

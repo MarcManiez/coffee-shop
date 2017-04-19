@@ -4,11 +4,13 @@
 
 - Make sure you have node up and running
 - `npm install`
-- `node cafe_shoppe.js` to run the program without options, or `npm start`. This will produce the result for the first in first out solution.
-- Options:
+- `node cafe_shoppe.js` from the project root, or `npm start`. This will produce the result for the first in first out solution.
+- Options (remember to add `--` if using `npm start` —- Eg `npm start -- --baristas 5`):
   - `--queue` to give an optimization preference. Eg. `node cafe_shoppe.js --queue profit`
   - `--time` to run the shoppe for the indicated amount of time. Eg. `node cafe_shoppe.js --time 50`
   - `--baristas` to run the shoppe with the indicated number of baristas. Eg. `node cafe_shoppe.js --baristas 5`
+  - `--orders` to run the shoppe with a specific set of orders. Use the path relative to the parent directory of cafe_shoppe.js. Eg. `node cafe_shoppe.js --orders ./sample-data/input.json`
+  - `--menu`  to run the shoppe with a specific menu. Use the path relative to the parent directory of cafe_shoppe.js. Eg. `node cafe_shoppe.js --menu ./sample-data/menu.json`
 
 ## How to test me
 

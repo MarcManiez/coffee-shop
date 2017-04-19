@@ -1,4 +1,4 @@
-class Barista {
+module.exports = class Barista {
   constructor(id) {
     this.id = id;
     this.busyUntil = 0;
@@ -6,6 +6,4 @@ class Barista {
   isAvailable(time) {
     return this.busyUntil <= time;
   }
-}
-
-module.exports = Barista;
+};

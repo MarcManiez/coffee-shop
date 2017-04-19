@@ -1,4 +1,4 @@
-class Queue {
+module.exports = class Queue {
   constructor () {
     this.queue = [];
   }
@@ -11,6 +11,4 @@ class Queue {
   isEmpty() {
     return !this.queue.length;
   }
-}
-
-module.exports = Queue;
+};
